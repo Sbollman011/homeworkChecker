@@ -1,0 +1,128 @@
+*-----------------------------------------------------------
+* Title      :HomeworckChecker
+* Written by :Steven & Friends
+* Date       :10/25/2020
+* Description: A program to perform an operation on hex values given by user.
+* The programs returns the new hex number after the operation as well as any flags
+* That were set off
+*
+* ##!!MESSAGES IN CAPS ARE IMPORTANT!!!!!!!!!!#####
+*
+* Currently, initial hex data and the operation are hard coded. Extended is just connected
+* to carry.... needs fixing
+
+* ##!!!TO USE: Hardcode your hex value into data, and hardcode the operation
+* in the 4 spots under labels, OVFL,CAR,NEG,ZER
+*-----------------------------------------------------------
+    
+CR       EQU     $0D             *Carriage return
+LF       EQU     $0A             *Line feed
+data     EQU     $025C30F7      * !!!PUT YOUR HEXDECIMAL VALUE HERE !!!!
+
+
+        ORG    $1000
+START:                 
+LOOP
+
+    LEA         GREET,A1    *Loads greeting message CANNOT ENTER INPUT ATM MUST HARDCODE
+    MOVE.B      #14,D0
+    TRAP        #15
+       
+*-----INPUT ATTEMPT-----------      
+   *MOVE.B      #2,D0            *Move 4 to data register 0 for trap task
+   *TRAP        #15              *Trap task reads from input and puts input data into D1.L
+   *MOVE.L      (A1),D5
+   *CLR         D1
+    
+    
+    LEA         GREET2,A1         *Loads second greeting message/rules/Notes
+    MOVE.B      #14,D0
+    TRAP        #15
+OVFL
+    MOVE.L      #data,D1        *Moves data(your hex value) into D1 for trap task
+    ADDI.B      #$10,D1         *##!!!HARDCODE YOUR OPERATION HERE!!!!!CHANGE TO D1!!! performs your operation!!!!!!###
+    BVC         OVER            *Branches if overflow flag is set   
+    
+    
+CAR
+    CLR         D1              
+    MOVE.L      #data,D1         
+    ADDI.B      #$10,D1         *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
+    BCS         CARRY           *Branches if carry flag is set
+    
+    
+NEG
+    CLR         D1
+    MOVE.L      #data,D1         
+    ADDI.B      #$10,D1         *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
+    CMP.L       #0,D1
+    BLT         NEGA            *Branches if negative flag is set
+     
+    
+ZER 
+    CLR         D1
+    MOVE.L      #data,D1
+    ADDI.B      #$10,D1        *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
+    CMP.L       #0,D1  
+    BEQ         ZERO           *Branches if Zerp flag is set
+    
+    
+RESULT                         *returns number stored in D1, should be hex result.
+    MOVE.B      #15,D0     
+    MOVE.B      #16,D2
+    TRAP        #15
+    BRA         DONE
+
+
+
+CARRY                       *Displays message if carry flag is set, branches back to NEG to continue
+    LEA         CAROUT,A1           
+    MOVE.B      #14,D0
+    TRAP        #15
+    BRA         NEG
+    
+       
+OVER                        *Displays message if overflow flag is set, branches back to NEG to continue
+    LEA         OVROUT,A1
+    MOVE.B      #14,D0
+    TRAP        #15
+    BRA         CAR
+    
+
+NEGA                        *Displays message if negative flag is set, branches back to NEG to continue
+    LEA         NEGOUT,A1
+    MOVE.B      #14,D0
+    TRAP        #15
+    BRA         ZER
+    
+    
+ZERO                        *Displays message if zero flag is set, branches back to NEG to continue
+    LEA         ZEROUT,A1
+    MOVE.B      #14,D0
+    TRAP        #15
+    BRA         RESULT
+    
+    
+DONE
+     MOVE.B     #9,D0
+     TRAP       #15                 Halt Simulator
+
+   
+
+GREET     DC.B    CR,LF,'Enter your hex value to perform Operation and Flag Check.',CR,LF,0 
+GREET2    DC.B   '*000XNZVC* ROL operation ignores X and V is always 0',CR,LF,0 
+CAROUT    DC.B    CR,LF,'CARRY FLAG SET (C). EXTENDED FLAG SET (X)',CR,LF,0 
+OVROUT    DC.B    LF,CR,LF,'OVERFLOW FLAG SET (V).',CR,LF,0
+NEGOUT    DC.B    'NEGATIVE FLAG SET (N).',CR,LF,0
+ZEROUT    DC.B    'ZERO FLAG SET (Z).',CR,LF,CR,LF,0
+
+
+
+
+    END    START        ; last line of source
+
+
+*~Font name~Courier New~
+*~Font size~10~
+*~Tab type~1~
+*~Tab size~4~
