@@ -1,6 +1,6 @@
 00001000 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.16.01
-Created On: 10/28/2020 7:32:09 PM
+Created On: 10/28/2020 7:40:15 PM
 
 00000000                             1  *-----------------------------------------------------------
 00000000                             2  * Title      :HomeworckChecker
@@ -27,123 +27,123 @@ Created On: 10/28/2020 7:32:09 PM
 00001000                            23           ORG    $1000
 00001000                            24  START:                 
 00001000                            25  LOOP
-00001000  43F9 000010CA             26      LEA         GREET,A1        *Loads greeting message CANNOT ENTER INPUT ATM MUST HARDCODE
+00001000  43F9 000010B0             26      LEA         GREET,A1        *Loads greeting message CANNOT ENTER INPUT ATM MUST HARDCODE
 00001006  103C 000E                 27      MOVE.B      #14,D0
 0000100A  4E4F                      28      TRAP        #15
 0000100C  363C 0000                 29      MOVE        #0,D3           *Move 0 into D3 for a FOR loop
 00001010                            30      
 00001010                            31      
-00001010                            32  INLOOP
-00001010  5243                      33      ADD.W       #1,D3
-00001012  B67C 0008                 34      CMP.W       #8,D3
-00001016  6E00 000E                 35      BGT         COMP
-0000101A  103C 0005                 36      MOVE.B      #5,D0         *Move 4 to data register 0 for trap task
-0000101E  4E4F                      37      TRAP        #15             *Trap task reads from input and puts input data into D1.L
-00001020  2801                      38      MOVE.L      D1,D4
-00001022  E304                      39      ASL.B       #1,D4       
-00001024  60EA                      40      BRA         INLOOP
-00001026                            41      
-00001026                            42      
-00001026                            43  *-----Conversion Methods-------
-00001026                            44  ASC2HEX
-00001026                            45      
-00001026                            46      
-00001026                            47  
-00001026                            48  ALPHA
-00001026                            49  
-00001026                            50  ERROR
-00001026                            51  *----Computations----
-00001026                            52  COMP
-00001026  43F9 00001108             53      LEA         GREET2,A1       *Loads second greeting message/rules/Notes
-0000102C  103C 000E                 54      MOVE.B      #14,D0
-00001030  4E4F                      55      TRAP        #15
-00001032                            56      
-00001032                            57  
-00001032                            58  OVFL
-00001032  44FC 0000                 59      MOVE        #$00,CCR
-00001036  223C 3456ABCF             60      MOVE.L      #data,D1        *Moves data(your hex value) into D1 for trap task
-0000103C  E640                      61       ASR.W #3,D0         *##!!!HARDCODE YOUR OPERATION HERE!!!!!CHANGE TO D1!!! performs your operation!!!!!!###
-0000103E  6900 005A                 62      BVS         OVER            *Branches if overflow flag is set   
-00001042                            63      
-00001042                            64      
-00001042                            65  CAR
-00001042  44FC 0000                 66      MOVE        #$00,CCR
-00001046  223C 3456ABCF             67      MOVE.L      #data,D1         
-0000104C  E640                      68       ASR.W #3,D0          *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
-0000104E  6500 003C                 69      BCS         CARRY           *Branches if carry flag is set
-00001052                            70      
-00001052                            71      
-00001052                            72  NEG
-00001052  44FC 0000                 73      MOVE        #$00,CCR
-00001056  223C 3456ABCF             74      MOVE.L      #data,D1         
-0000105C  E640                      75       ASR.W #3,D0           *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
-0000105E  B2BC 00000000             76      CMP.L       #0,D1
-00001064  6D00 0042                 77      BLT         NEGA            *Branches if negative flag is set
-00001068                            78       
-00001068                            79      
-00001068                            80  ZER 
-00001068  44FC 0000                 81      MOVE        #$00,CCR
-0000106C  223C 3456ABCF             82      MOVE.L      #data,D1
-00001072  E640                      83       ASR.W #3,D0       *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
-00001074  B2BC 00000000             84      CMP.L       #0,D1  
-0000107A  6700 003A                 85      BEQ         ZERO           *Branches if Zerp flag is set
-0000107E                            86      
-0000107E                            87      
-0000107E                            88  RESULT  
-0000107E                            89                                    *returns number stored in D1, should be hex result.
-0000107E  103C 000F                 90      MOVE.B      #15,D0     
-00001082  143C 0010                 91      MOVE.B      #16,D2
-00001086  4E4F                      92      TRAP        #15
-00001088  6000 003A                 93      BRA         DONE
-0000108C                            94  
-0000108C                            95  
-0000108C                            96  *-------MESSAGES---------------
-0000108C                            97  
-0000108C                            98  CARRY                        *Displays message if carry flag is set, branches back to NEG to continue
-0000108C  43F9 00001141             99      LEA         CAROUT,A1           
-00001092  103C 000E                100      MOVE.B      #14,D0
-00001096  4E4F                     101      TRAP        #15
-00001098  60B8                     102      BRA         NEG
-0000109A                           103      
-0000109A                           104         
-0000109A                           105  OVER                         *Displays message if overflow flag is set, branches back to NEG to continue
-0000109A  43F9 0000116F            106      LEA         OVROUT,A1
-000010A0  103C 000E                107      MOVE.B      #14,D0
-000010A4  4E4F                     108      TRAP        #15
-000010A6  609A                     109      BRA         CAR
-000010A8                           110      
-000010A8                           111  
-000010A8                           112  NEGA                         *Displays message if negative flag is set, branches back to NEG to continue
-000010A8  43F9 0000118B            113      LEA         NEGOUT,A1
-000010AE  103C 000E                114      MOVE.B      #14,D0
-000010B2  4E4F                     115      TRAP        #15
-000010B4  60B2                     116      BRA         ZER
-000010B6                           117      
-000010B6                           118      
-000010B6                           119  ZERO                         *Displays message if zero flag is set, branches back to NEG to continue
-000010B6  43F9 000011A4            120      LEA         ZEROUT,A1
-000010BC  103C 000E                121      MOVE.B      #14,D0
-000010C0  4E4F                     122      TRAP        #15
-000010C2  60BA                     123      BRA         RESULT
-000010C4                           124      
-000010C4                           125      
-000010C4                           126  DONE
-000010C4  103C 0009                127       MOVE.B     #9,D0
-000010C8  4E4F                     128       TRAP       #15                 Halt Simulator
-000010CA                           129  
-000010CA                           130     
-000010CA                           131  
-000010CA= 0D 0A 45 6E 74 65 ...    132  GREET     DC.B    CR,LF,'Enter your hex value to perform Operation and Flag Check.',CR,LF,0 
-00001108= 0D 0A 2A 30 30 30 ...    133  GREET2    DC.B    CR,LF,'*000XNZVC* ROL operation ignores X and V is always 0',CR,LF,0 
-00001141= 0D 0A 43 41 52 52 ...    134  CAROUT    DC.B    CR,LF,'CARRY FLAG SET (C). EXTENDED FLAG SET (X)',CR,LF,0 
-0000116F= 0A 0D 0A 4F 56 45 ...    135  OVROUT    DC.B    LF,CR,LF,'OVERFLOW FLAG SET (V).',CR,LF,0
-0000118B= 4E 45 47 41 54 49 ...    136  NEGOUT    DC.B    'NEGATIVE FLAG SET (N).',CR,LF,0
-000011A4= 5A 45 52 4F 20 46 ...    137  ZEROUT    DC.B    'ZERO FLAG SET (Z).',CR,LF,CR,LF,0
-000011BB                           138  
-000011BB                           139  
-000011BB                           140  
-000011BB                           141  
-000011BB                           142      END    START        ; last line of source
+00001010                            32  *INLOOP
+00001010                            33   *   ADD.W       #1,D3
+00001010                            34   *   CMP.W       #8,D3
+00001010                            35   *  BGT         COMP
+00001010                            36   *   MOVE.B      #5,D0         *Move 4 to data register 0 for trap task
+00001010                            37   *   TRAP        #15             *Trap task reads from input and puts input data into D1.L
+00001010                            38   *   MOVE.L      D1,D4
+00001010                            39   *   ASL.B       #1,D4       
+00001010                            40   *   BRA         INLOOP
+00001010                            41      
+00001010                            42      
+00001010                            43  *-----Conversion Methods-------
+00001010                            44  ASC2HEX
+00001010                            45      
+00001010                            46      
+00001010                            47  
+00001010                            48  ALPHA
+00001010                            49  
+00001010                            50  ERROR
+00001010                            51  *----Computations----
+00001010                            52  COMP
+00001010  43F9 000010EE             53      LEA         GREET2,A1       *Loads second greeting message/rules/Notes
+00001016  123C 000E                 54      MOVE.B      #14,D1
+0000101A  4E4F                      55      TRAP        #15
+0000101C                            56      
+0000101C                            57  
+0000101C                            58  OVFL
+0000101C  44FC 0000                 59      MOVE        #$00,CCR
+00001020  223C 3456ABCF             60      MOVE.L      #data,D1        *Moves data(your hex value) into D1 for trap task
+00001026  E759                      61       ROL.W #3,D1         *##!!!HARDCODE YOUR OPERATION HERE!!!!!CHANGE TO D1!!! performs your operation!!!!!!###
+00001028  6900 0056                 62      BVS         OVER            *Branches if overflow flag is set   
+0000102C                            63      
+0000102C                            64      
+0000102C                            65  CAR
+0000102C  44FC 0000                 66      MOVE        #$00,CCR
+00001030  223C 3456ABCF             67      MOVE.L      #data,D1         
+00001036  E759                      68       ROL.W #3,D1          *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
+00001038  6500 0038                 69      BCS         CARRY           *Branches if carry flag is set
+0000103C                            70      
+0000103C                            71      
+0000103C                            72  NEG
+0000103C  44FC 0000                 73      MOVE        #$00,CCR
+00001040  223C 3456ABCF             74      MOVE.L      #data,D1         
+00001046  E759                      75       ROL.W #3,D1           *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
+00001048  B27C 0000                 76      CMP.W       #0,D1       *##!!! CMP DATA LENGTH MUST BE EQUAL TO THE OPERATIONS LENGTH ABOVE!!!!!!############
+0000104C  6D00 0040                 77      BLT         NEGA            *Branches if negative flag is set
+00001050                            78       
+00001050                            79      
+00001050                            80  ZER 
+00001050  44FC 0000                 81      MOVE        #$00,CCR
+00001054  223C 3456ABCF             82      MOVE.L      #data,D1
+0000105A  E759                      83       ROL.W #3,D1       *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
+0000105C  B27C 0000                 84      CMP.W       #0,D1  *##!!! CMP DATA LENGTH MUST BE EQUAL TO THE OPERATIONS LENGTH ABOVE!!!!!!############
+00001060  6700 003A                 85      BEQ         ZERO           *Branches if Zerp flag is set
+00001064                            86      
+00001064                            87      
+00001064                            88  RESULT  
+00001064                            89                                    *returns number stored in D1, should be hex result.
+00001064  103C 000F                 90      MOVE.B      #15,D0     
+00001068  143C 0010                 91      MOVE.B      #16,D2
+0000106C  4E4F                      92      TRAP        #15
+0000106E  6000 003A                 93      BRA         DONE
+00001072                            94  
+00001072                            95  
+00001072                            96  *-------MESSAGES---------------
+00001072                            97  
+00001072                            98  CARRY                        *Displays message if carry flag is set, branches back to NEG to continue
+00001072  43F9 00001127             99      LEA         CAROUT,A1           
+00001078  103C 000E                100      MOVE.B      #14,D0
+0000107C  4E4F                     101      TRAP        #15
+0000107E  60BC                     102      BRA         NEG
+00001080                           103      
+00001080                           104         
+00001080                           105  OVER                         *Displays message if overflow flag is set, branches back to NEG to continue
+00001080  43F9 00001155            106      LEA         OVROUT,A1
+00001086  103C 000E                107      MOVE.B      #14,D0
+0000108A  4E4F                     108      TRAP        #15
+0000108C  609E                     109      BRA         CAR
+0000108E                           110      
+0000108E                           111  
+0000108E                           112  NEGA                         *Displays message if negative flag is set, branches back to NEG to continue
+0000108E  43F9 00001171            113      LEA         NEGOUT,A1
+00001094  103C 000E                114      MOVE.B      #14,D0
+00001098  4E4F                     115      TRAP        #15
+0000109A  60B4                     116      BRA         ZER
+0000109C                           117      
+0000109C                           118      
+0000109C                           119  ZERO                         *Displays message if zero flag is set, branches back to NEG to continue
+0000109C  43F9 0000118A            120      LEA         ZEROUT,A1
+000010A2  103C 000E                121      MOVE.B      #14,D0
+000010A6  4E4F                     122      TRAP        #15
+000010A8  60BA                     123      BRA         RESULT
+000010AA                           124      
+000010AA                           125      
+000010AA                           126  DONE
+000010AA  103C 0009                127       MOVE.B     #9,D0
+000010AE  4E4F                     128       TRAP       #15                 Halt Simulator
+000010B0                           129  
+000010B0                           130     
+000010B0                           131  
+000010B0= 0D 0A 45 6E 74 65 ...    132  GREET     DC.B    CR,LF,'Enter your hex value to perform Operation and Flag Check.',CR,LF,0 
+000010EE= 0D 0A 2A 30 30 30 ...    133  GREET2    DC.B    CR,LF,'*000XNZVC* ROL operation ignores X and V is always 0',CR,LF,0 
+00001127= 0D 0A 43 41 52 52 ...    134  CAROUT    DC.B    CR,LF,'CARRY FLAG SET (C). EXTENDED FLAG SET (X)',CR,LF,0 
+00001155= 0A 0D 0A 4F 56 45 ...    135  OVROUT    DC.B    LF,CR,LF,'OVERFLOW FLAG SET (V).',CR,LF,0
+00001171= 4E 45 47 41 54 49 ...    136  NEGOUT    DC.B    'NEGATIVE FLAG SET (N).',CR,LF,0
+0000118A= 5A 45 52 4F 20 46 ...    137  ZEROUT    DC.B    'ZERO FLAG SET (Z).',CR,LF,CR,LF,0
+000011A1                           138  
+000011A1                           139  
+000011A1                           140  
+000011A1                           141  
+000011A1                           142      END    START        ; last line of source
 
 No errors detected
 No warnings generated
@@ -152,29 +152,28 @@ No warnings generated
 SYMBOL TABLE INFORMATION
 Symbol-name         Value
 -------------------------
-ALPHA               1026
-ASC2HEX             1026
-CAR                 1042
-CAROUT              1141
-CARRY               108C
-COMP                1026
+ALPHA               1010
+ASC2HEX             1010
+CAR                 102C
+CAROUT              1127
+CARRY               1072
+COMP                1010
 CR                  D
 DATA                3456ABCF
-DONE                10C4
-ERROR               1026
-GREET               10CA
-GREET2              1108
-INLOOP              1010
+DONE                10AA
+ERROR               1010
+GREET               10B0
+GREET2              10EE
 LF                  A
 LOOP                1000
-NEG                 1052
-NEGA                10A8
-NEGOUT              118B
-OVER                109A
-OVFL                1032
-OVROUT              116F
-RESULT              107E
+NEG                 103C
+NEGA                108E
+NEGOUT              1171
+OVER                1080
+OVFL                101C
+OVROUT              1155
+RESULT              1064
 START               1000
-ZER                 1068
-ZERO                10B6
-ZEROUT              11A4
+ZER                 1050
+ZERO                109C
+ZEROUT              118A

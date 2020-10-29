@@ -58,30 +58,30 @@ COMP
 OVFL
     MOVE        #$00,CCR
     MOVE.L      #data,D1        *Moves data(your hex value) into D1 for trap task
-     ASR.W #3,D1         *##!!!HARDCODE YOUR OPERATION HERE!!!!!CHANGE TO D1!!! performs your operation!!!!!!###
+     ROL.W #3,D1         *##!!!HARDCODE YOUR OPERATION HERE!!!!!CHANGE TO D1!!! performs your operation!!!!!!###
     BVS         OVER            *Branches if overflow flag is set   
     
     
 CAR
     MOVE        #$00,CCR
     MOVE.L      #data,D1         
-     ASR.W #3,D1          *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
+     ROL.W #3,D1          *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
     BCS         CARRY           *Branches if carry flag is set
     
     
 NEG
     MOVE        #$00,CCR
     MOVE.L      #data,D1         
-     ASR.W #3,D1           *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
-    CMP.L       #0,D1
+     ROL.W #3,D1           *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
+    CMP.W       #0,D1       *##!!! CMP DATA LENGTH MUST BE EQUAL TO THE OPERATIONS LENGTH ABOVE!!!!!!############
     BLT         NEGA            *Branches if negative flag is set
      
     
 ZER 
     MOVE        #$00,CCR
     MOVE.L      #data,D1
-     ASR.W #3,D1       *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
-    CMP.L       #0,D1  
+     ROL.W #3,D1       *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
+    CMP.W       #0,D1  *##!!! CMP DATA LENGTH MUST BE EQUAL TO THE OPERATIONS LENGTH ABOVE!!!!!!############
     BEQ         ZERO           *Branches if Zerp flag is set
     
     
