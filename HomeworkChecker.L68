@@ -1,6 +1,6 @@
 00001000 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.16.01
-Created On: 10/28/2020 7:40:15 PM
+Created On: 10/28/2020 7:45:02 PM
 
 00000000                             1  *-----------------------------------------------------------
 00000000                             2  * Title      :HomeworckChecker
@@ -21,7 +21,7 @@ Created On: 10/28/2020 7:40:15 PM
 00000000                            17      
 00000000  =0000000D                 18  CR       EQU     $0D            *Carriage return
 00000000  =0000000A                 19  LF       EQU     $0A            *Line feed
-00000000  =3456ABCF                 20  data     EQU     $3456ABCF      * !!!PUT YOUR HEXDECIMAL VALUE HERE !!!!
+00000000  =3456CBCF                 20  data     EQU     $3456CBCF    * !!!PUT YOUR HEXDECIMAL VALUE HERE !!!!
 00000000                            21  
 00000000                            22  
 00001000                            23           ORG    $1000
@@ -61,21 +61,21 @@ Created On: 10/28/2020 7:40:15 PM
 0000101C                            57  
 0000101C                            58  OVFL
 0000101C  44FC 0000                 59      MOVE        #$00,CCR
-00001020  223C 3456ABCF             60      MOVE.L      #data,D1        *Moves data(your hex value) into D1 for trap task
+00001020  223C 3456CBCF             60      MOVE.L      #data,D1        *Moves data(your hex value) into D1 for trap task
 00001026  E759                      61       ROL.W #3,D1         *##!!!HARDCODE YOUR OPERATION HERE!!!!!CHANGE TO D1!!! performs your operation!!!!!!###
 00001028  6900 0056                 62      BVS         OVER            *Branches if overflow flag is set   
 0000102C                            63      
 0000102C                            64      
 0000102C                            65  CAR
 0000102C  44FC 0000                 66      MOVE        #$00,CCR
-00001030  223C 3456ABCF             67      MOVE.L      #data,D1         
+00001030  223C 3456CBCF             67      MOVE.L      #data,D1         
 00001036  E759                      68       ROL.W #3,D1          *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
 00001038  6500 0038                 69      BCS         CARRY           *Branches if carry flag is set
 0000103C                            70      
 0000103C                            71      
 0000103C                            72  NEG
 0000103C  44FC 0000                 73      MOVE        #$00,CCR
-00001040  223C 3456ABCF             74      MOVE.L      #data,D1         
+00001040  223C 3456CBCF             74      MOVE.L      #data,D1         
 00001046  E759                      75       ROL.W #3,D1           *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
 00001048  B27C 0000                 76      CMP.W       #0,D1       *##!!! CMP DATA LENGTH MUST BE EQUAL TO THE OPERATIONS LENGTH ABOVE!!!!!!############
 0000104C  6D00 0040                 77      BLT         NEGA            *Branches if negative flag is set
@@ -83,7 +83,7 @@ Created On: 10/28/2020 7:40:15 PM
 00001050                            79      
 00001050                            80  ZER 
 00001050  44FC 0000                 81      MOVE        #$00,CCR
-00001054  223C 3456ABCF             82      MOVE.L      #data,D1
+00001054  223C 3456CBCF             82      MOVE.L      #data,D1
 0000105A  E759                      83       ROL.W #3,D1       *##!!!HARDCODE YOUR OPERATION HERE!!!!CHANGE TO D1!!! performs your operation!!!!!!###
 0000105C  B27C 0000                 84      CMP.W       #0,D1  *##!!! CMP DATA LENGTH MUST BE EQUAL TO THE OPERATIONS LENGTH ABOVE!!!!!!############
 00001060  6700 003A                 85      BEQ         ZERO           *Branches if Zerp flag is set
@@ -159,7 +159,7 @@ CAROUT              1127
 CARRY               1072
 COMP                1010
 CR                  D
-DATA                3456ABCF
+DATA                3456CBCF
 DONE                10AA
 ERROR               1010
 GREET               10B0
